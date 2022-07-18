@@ -1,0 +1,16 @@
+*.jpg
+cropped/
+cropped_result/
+cropped/*.jpg
+images/
+images/*.jpg
+*.png
+*.gif
+*.pth
+*.caffemodel
+output/
+result/
+true_result/
+.idea/
+.gitkeep
+*.prototxt
