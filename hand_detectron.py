@@ -6,11 +6,26 @@ import pandas as pd
 
 from one_detect import plot_one
 
-bg1_ins = [[745, 473], [1176, 478]]
-bg2_ins = [[785, 450], [1212, 446]]
+ins = np.array([
+    [[745, 473], [1176, 478]],
+    [[785, 450], [1212, 446]],
+    [[772, 445], [1183, 443]],
+    [[805, 449], [1251, 451]]
+])
 
-bg1 = [[326, 247], [1245, 708]]
-bg2 = [[277, 160], [1273, 709]]
+bg = np.array([
+    [[326, 247], [1245, 708]],
+    [[277, 160], [1273, 709]],
+    [[228, 129], [1253, 700]],
+    [[310, 188], [1276, 716]]
+])
+
+hum_range = [
+    [1, 64],
+    [65, 180],
+    [181, 274],
+    [275, 284]
+]
 
 
 # 坐标变换
@@ -53,8 +68,9 @@ def calcute_measure():
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(64):
+    for i in range(file.shape[0]):
         file_name = file.iloc[i, 0]
+        mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
         id = str(file_name)
         hand_loc_list = []
@@ -64,7 +80,7 @@ def calcute_measure():
             file_path = os.path.join(restore_path, id, frame + '.jpg')
             # if not os.path.exists(os.path.join('true_result', id)):
             #     os.mkdir(os.path.join('true_result', id))
-            hand = plot_one(test_image=file_path, save_file=os.path.join('true_result', f'{id}-{frame}.png'))
+            hand = plot_one(test_image=file_path, save_file=os.path.join('true_result', f'{id}-{frame}.png'), mode=mode)
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:
@@ -76,9 +92,10 @@ def calcute_measure():
         if np.any(hand_loc_list):
             large_site = np.argmax(hand_loc_list, axis=0)[0]
             large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
-            if bg1_ins[0][0] < large_hand_x < bg1_ins[1][0] and bg1[0][1] < large_hand_y < bg1[1][1]:
+            if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
+                    bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
                 print('最远手的位置是{}, {}'.format(large_hand_x, large_hand_y))
-                result = (large_hand_x - bg1_ins[0][0]) / (bg1_ins[1][0] - bg1_ins[0][0]) * 80
+                result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
                 result = result.round(2)
                 true_result = update_result([large_hand_x, large_hand_y])
                 true_result = true_result.round(2)

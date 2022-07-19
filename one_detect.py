@@ -7,25 +7,14 @@ from src import util
 from src.body import Body
 from src.hand import Hand
 
-bg1_ins = [[745, 473], [1176, 478]]
-bg2_ins = [[785, 450], [1212, 446]]
-
-bg1 = [[326, 247], [1245, 708]]
-bg2 = [[277, 160], [1273, 709]]
-
-keen_y = [470, 450]
-
-mode = 1
-
-
-# 上午为0，下午为1
+keen_y = [470, 450, 445, 450]
 
 def get_x_dis(candidate, subset, idx1, idx2):
     x1, x2 = candidate[idx1, 0], candidate[idx2, 0]
     return np.abs(x1 - x2)
 
 
-def plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628072/127.jpg', save_file='result.png'):
+def plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628072/127.jpg', save_file='result.png', mode=1):
     body_estimation = Body('model/body_pose_model.pth')
     hand_estimation = Hand('model/hand_pose_model.pth')
     oriImg = cv2.imread(test_image)  # B,G,R order
