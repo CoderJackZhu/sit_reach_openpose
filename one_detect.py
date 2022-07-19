@@ -13,7 +13,7 @@ def get_x_dis(candidate, subset, idx1, idx2):
     return np.abs(x1 - x2)
 
 
-def plot_one(test_image, save_file, keen_y, mode):
+def plot_one(test_image, save_file, keen_y):
     body_estimation = Body('model/body_pose_model.pth')
     hand_estimation = Hand('model/hand_pose_model.pth')
     oriImg = cv2.imread(test_image)  # B,G,R order
@@ -147,5 +147,5 @@ def plot_one(test_image, save_file, keen_y, mode):
 if __name__ == '__main__':
     # plot_multi(output_dir='./cropped', result_dir='./cropped_result')
     plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628202/094.jpg',
-             save_file='result.png', keen_y=445, mode=2)
+             save_file='result.png', keen_y=445)
     # plot_multi()
