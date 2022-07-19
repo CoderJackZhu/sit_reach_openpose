@@ -27,6 +27,13 @@ hum_range = [
     [275, 284]
 ]
 
+srcpoint = [
+    [],
+    [[783, 442], [1203, 442], [798, 453], [1227, 453]]
+]
+
+keen_y = [470, 450, 445, 450]
+
 
 # 坐标变换
 def cvt_pos(pos, cvt_mat_t):
@@ -39,10 +46,10 @@ def cvt_pos(pos, cvt_mat_t):
     return (x, y)
 
 
-def update_result(pos):
+def update_result(pos, mode=1):
     src = cv2.imread('./images/2-001.jpg')
     w, h = 800, 500
-    srcPoint = np.float32([[783, 442], [1203, 442], [798, 453], [1227, 453]])  # 场景2，参考线内缘四角
+    srcPoint = np.float32(srcpoint[mode])  # 场景2，参考线内缘四角
     canPoint = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
     Mat = cv2.getPerspectiveTransform(np.array(srcPoint), np.array(canPoint))
     # result = cv2.warpPerspective(src, Mat, (w, h))
@@ -62,13 +69,11 @@ def draw_point(img, x, y):
     return img
 
 
-def calcute_measure():
-    # restore_path='./output'
-    restore_path = 'E:\Project\Sit_and_reach_clip'
+def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true_result'):
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(file.shape[0]):
+    for i in range(180, file.shape[0]):
         file_name = file.iloc[i, 0]
         mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
@@ -80,7 +85,8 @@ def calcute_measure():
             file_path = os.path.join(restore_path, id, frame + '.jpg')
             # if not os.path.exists(os.path.join('true_result', id)):
             #     os.mkdir(os.path.join('true_result', id))
-            hand = plot_one(test_image=file_path, save_file=os.path.join('true_result', f'{id}-{frame}.png'), mode=mode)
+            hand = plot_one(test_image=file_path,
+                            save_file=os.path.join(save_dir, f'{id}-{frame}.png'), keen_y=keen_y[mode], mode=mode)
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:
@@ -94,21 +100,22 @@ def calcute_measure():
             large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
             if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
                     bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
-                print('最远手的位置是{}, {}'.format(large_hand_x, large_hand_y))
+                print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
                 result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
                 result = result.round(2)
-                true_result = update_result([large_hand_x, large_hand_y])
-                true_result = true_result.round(2)
-                # draw_point(cv2.imread(file_path), large_hand_x, large_hand_y)
                 file.iloc[i, 6] = result
-                file.iloc[i, 7] = true_result
-                print('真实成绩为{}\n未修正的成绩为{}cm\n修正后的成绩为{}'.format(file.iloc[i, 4], result, true_result))
+                print('记录成绩为{}'.format(file.iloc[i, 4]))
+                print(f'未修正的成绩为{result}')
+
+                # true_result = update_result([large_hand_x, large_hand_y])
+                # true_result = true_result.round(2)
+                # file.iloc[i, 7] = true_result
+                # print(f'畸变修正后的成绩为{true_result}')
             else:
                 print('最远手的位置不在范围内')
                 file.iloc[i, 6] = 0
                 continue
         else:
-            large_hand_x = 0
             print('未找到手')
             file.iloc[i, 6] = -1
 
@@ -116,4 +123,4 @@ def calcute_measure():
 
 
 if __name__ == '__main__':
-    calcute_measure()
+    calcute_measure(restore_path='E:/Project/Sit_and_reach_clip', save_dir='true_result')

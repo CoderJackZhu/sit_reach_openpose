@@ -7,14 +7,13 @@ from src import util
 from src.body import Body
 from src.hand import Hand
 
-keen_y = [470, 450, 445, 450]
 
 def get_x_dis(candidate, subset, idx1, idx2):
     x1, x2 = candidate[idx1, 0], candidate[idx2, 0]
     return np.abs(x1 - x2)
 
 
-def plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628072/127.jpg', save_file='result.png', mode=1):
+def plot_one(test_image, save_file, keen_y, mode):
     body_estimation = Body('model/body_pose_model.pth')
     hand_estimation = Hand('model/hand_pose_model.pth')
     oriImg = cv2.imread(test_image)  # B,G,R order
@@ -32,31 +31,30 @@ def plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628072/127.jpg', sav
         idx5 = int(subset[obj, 10])  # 左脚
         idx6 = int(subset[obj, 13])  # 右脚
         if idx1 != -1:
-            if candidate[idx1, 1] < keen_y[mode]:
+            if candidate[idx1, 1] < keen_y:
                 del_idx.append(obj)
                 continue
         if idx2 != -1:
-            if candidate[idx2, 1] < keen_y[mode]:
+            if candidate[idx2, 1] < keen_y:
                 del_idx.append(obj)
                 continue
         if idx3 != -1:
-            if candidate[idx3, 1] < keen_y[mode]:
+            if candidate[idx3, 1] < keen_y:
                 del_idx.append(obj)
                 continue
         if idx4 != -1:
-            if candidate[idx4, 1] < keen_y[mode]:
+            if candidate[idx4, 1] < keen_y:
                 del_idx.append(obj)
                 continue
         if idx5 != -1:
-            if candidate[idx5, 1] < keen_y[mode]:
+            if candidate[idx5, 1] < keen_y:
                 del_idx.append(obj)
                 continue
         if idx6 != -1:
-            if candidate[idx6, 1] < keen_y[mode]:
+            if candidate[idx6, 1] < keen_y:
                 del_idx.append(obj)
                 continue
-        else:
-            # idx1 == -1 and idx2 == -1 and idx3 == -1 and idx4 == -1 and idx5 == -1 and idx6 == -1
+        elif idx1 == -1 and idx2 == -1 and idx3 == -1 and idx4 == -1 and idx5 == -1 and idx6 == -1:
             del_idx.append(obj)
     subset = np.delete(subset, del_idx, 0)
 
@@ -148,5 +146,6 @@ def plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628072/127.jpg', sav
 
 if __name__ == '__main__':
     # plot_multi(output_dir='./cropped', result_dir='./cropped_result')
-    plot_one()
+    plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628202/094.jpg',
+             save_file='result.png', keen_y=445, mode=2)
     # plot_multi()
