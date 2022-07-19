@@ -73,7 +73,7 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(180, file.shape[0]):
+    for i in range(180):
         file_name = file.iloc[i, 0]
         mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
@@ -103,21 +103,21 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
                 print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
                 result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
                 result = result.round(2)
-                file.iloc[i, 6] = result
+                file.iloc[i, 7] = result
                 print('记录成绩为{}'.format(file.iloc[i, 4]))
                 print(f'未修正的成绩为{result}')
 
                 # true_result = update_result([large_hand_x, large_hand_y])
                 # true_result = true_result.round(2)
-                # file.iloc[i, 7] = true_result
+                # file.iloc[i, 8] = true_result
                 # print(f'畸变修正后的成绩为{true_result}')
             else:
                 print('最远手的位置不在范围内')
-                file.iloc[i, 6] = 0
+                file.iloc[i, 7] = 0
                 continue
         else:
             print('未找到手')
-            file.iloc[i, 6] = -1
+            file.iloc[i, 7] = -1
 
         file.to_csv('./sit.csv', index=False)
 
