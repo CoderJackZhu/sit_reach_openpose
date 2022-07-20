@@ -154,6 +154,7 @@ def cal_one_frame(test_image, keen_y=470):
 def cal_multi_vid(root_dir='result'):
     ori_data = pd.read_csv('./sit_reach_data.csv', header=0)
     files = os.listdir(root_dir)
+    files.sor()
     row_list = [
         ['label_frame', 'meas_frame', 'label_len', 'meas_len']
     ]
@@ -161,11 +162,10 @@ def cal_multi_vid(root_dir='result'):
         id = int(file[-3:])
         frame = ori_data.iloc[id - 1, 3]
         mode = ori_data.iloc[id - 1, 5] - 1
-        print(id)
-        print(frame)
         pics = os.listdir(os.path.join(root_dir, file))
+        pics.sort()
         hand_loc_list = []
-        for pic in tqdm(pics):
+        for pic in pics:
             picture = os.path.join(os.path.join(root_dir, file, pic))
             hand = cal_one_frame(picture, keen_y=keen_y[mode])
             if len(hand) != 0:
@@ -173,7 +173,7 @@ def cal_multi_vid(root_dir='result'):
             else:
                 hand_location = [0, 0]
             hand_loc_list.append(hand_location)
-            print(f'file {file}:{pic}/{len(pics)} finished ')
+            print(f'file {file}:{pic[:-4]}/{len(pics)} finished ')
         hand_loc_list = np.array(hand_loc_list)
         large_site = np.argmax(hand_loc_list, axis=0)[0]
         large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
@@ -182,7 +182,9 @@ def cal_multi_vid(root_dir='result'):
             print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
             result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
             result = result.round(2)
-            print(f'最远帧为{large_site}\n成绩为{result}')
+            print('记录成绩为{}'.format(ori_data.iloc[id - 1, 4]))
+            print(f'成绩为{result}')
+            print(f'最远帧为{large_site}')
         else:
             result = 0
             print('最远手的位置不在范围内')
