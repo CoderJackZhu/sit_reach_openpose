@@ -9,6 +9,7 @@ from scipy.ndimage.filters import gaussian_filter
 from src import util
 from src.model import bodypose_model
 
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 class Body(object):
     def __init__(self, model_path):

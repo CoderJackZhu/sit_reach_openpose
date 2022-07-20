@@ -7,6 +7,7 @@ from skimage.measure import label
 from src import util
 from src.model import handpose_model
 
+# os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 class Hand(object):
     def __init__(self, model_path):

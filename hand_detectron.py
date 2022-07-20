@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-
+import time
 from one_detect import plot_one
 
 ins = np.array([
@@ -70,10 +70,11 @@ def draw_point(img, x, y):
 
 
 def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true_result'):
+    start_time = time.time()
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(180):
+    for i in range(10):
         file_name = file.iloc[i, 0]
         mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
@@ -86,7 +87,7 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
             # if not os.path.exists(os.path.join('true_result', id)):
             #     os.mkdir(os.path.join('true_result', id))
             hand = plot_one(test_image=file_path,
-                            save_file=os.path.join(save_dir, f'{id}-{frame}.png'), keen_y=keen_y[mode], mode=mode)
+                            save_file=os.path.join(save_dir, f'{id}-{frame}.png'), keen_y=keen_y[mode])
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:
@@ -120,6 +121,7 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
             file.iloc[i, 7] = -1
 
         file.to_csv('./sit.csv', index=False)
+    print(f'总共耗时{time.time() - start_time}')
 
 
 if __name__ == '__main__':
