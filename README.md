@@ -1,3 +1,9 @@
+## 使用指南
+
+本代码为使用openpose的pytorch魔改版本进行坐位体前屈结果的测量，在原代码的基础上加入一定的规则限定，使其可以只定位到进行体测的人，并通过简单的算法得到结果。其中`vid2pic`
+为把视频文件按帧读取为图片的代码，`crop.py`为部分裁剪的代码（可选），`one_detect.py`为手部检测单帧的代码，`hand_detectron.py`为读取标注的关键帧并读取相邻几帧图片得出结果的代码，`main_v1`
+为使用视频的所有帧进行测量的代码，为第一个较为完整的代码。
+
 ## pytorch-openpose
 
 pytorch implementation of [openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) including **Body and Hand
