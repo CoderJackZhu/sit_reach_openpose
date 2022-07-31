@@ -17,6 +17,13 @@ def plot_one(test_image, save_file, keen_y):
     body_estimation = Body('model/body_pose_model.pth')
     hand_estimation = Hand('model/hand_pose_model.pth')
     oriImg = cv2.imread(test_image)  # B,G,R order
+
+    # (b, g, r) = cv2.split(oriImg)  # 通道分解
+    # bH = cv2.equalizeHist(b)
+    # gH = cv2.equalizeHist(g)
+    # rH = cv2.equalizeHist(r)
+    # oriImg = cv2.merge((bH, gH, rH), )  # 通道合成
+
     candidate, subset = body_estimation(oriImg)
     canvas = copy.deepcopy(oriImg)
     canvas = util.draw_bodypose(canvas, candidate, subset)

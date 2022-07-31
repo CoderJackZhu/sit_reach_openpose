@@ -13,6 +13,8 @@ relative_error_list = []
 for i in range(data.shape[0]):
     if data.iloc[i, 3] != -1:
         absolute_error = data.iloc[i, 3] - data.iloc[i, 2]
+        if np.abs(absolute_error) > 10:
+            print(i, absolute_error)
         relative_error = absolute_error / data.iloc[i, 2]
         absolute_error_list.append(absolute_error)
         relative_error_list.append(relative_error)

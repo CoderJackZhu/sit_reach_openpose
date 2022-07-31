@@ -32,7 +32,7 @@ def get_x_dis(candidate, subset, idx1, idx2):
     return np.abs(x1 - x2)
 
 
-def cal_one_frame(test_image, keen_y=470):
+def cal_one_frame(test_image, save_file, keen_y=470):
     body_estimation = Body('model/body_pose_model.pth')
     hand_estimation = Hand('model/hand_pose_model.pth')
     oriImg = cv2.imread(test_image)  # B,G,R order
@@ -145,12 +145,13 @@ def cal_one_frame(test_image, keen_y=470):
             goal.append(all_hand_peaks[i])
     goal = np.array(goal)
     canvas = util.draw_handpose(canvas, goal)
+    cv2.imwrite(save_file, canvas)
     # cv2.imshow('result', canvas)
     # cv2.waitKey(0)
     return goal
 
 
-def cal_multi_vid(root_dir='result'):
+def cal_multi_vid(root_dir='./output', save_path='./test'):
     ori_data = pd.read_csv('./sit_reach_data.csv', header=0)
     files = os.listdir(root_dir)
     files.sort()
@@ -165,7 +166,9 @@ def cal_multi_vid(root_dir='result'):
         hand_loc_list = []
         for pic in pics:
             picture = os.path.join(os.path.join(root_dir, file, pic))
-            hand = cal_one_frame(picture, keen_y=keen_y[mode])
+            if not os.path.exists(os.path.join(save_path, str(id))):
+                os.makedirs(os.path.join(save_path, str(id)))
+            hand = cal_one_frame(picture, save_file=os.path.join(save_path, str(id), f'{pic}'), keen_y=keen_y[mode])
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:
@@ -182,11 +185,11 @@ def cal_multi_vid(root_dir='result'):
             result = result.round(2)
             print('记录成绩为{}'.format(ori_data.iloc[id - 1, 4]))
             print(f'预测成绩为{result}')
-            print(f'最远帧为{large_site}')
+            print(f'最远帧为{large_site + 1}')
         else:
             result = 0
             print('最远手的位置不在范围内')
-        result_file.loc[id] = [frame, large_site, ori_data.iloc[id - 1, 4], result]
+        result_file.loc[id] = [frame, large_site + 1, ori_data.iloc[id - 1, 4], result]
         result_file.to_csv('./result_file.csv', index=False)
     # with open('./result.csv', 'w', newline='') as f:
     #     writer = csv.writer(f)

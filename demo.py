@@ -10,7 +10,7 @@ from src.hand import Hand
 body_estimation = Body('model/body_pose_model.pth')
 hand_estimation = Hand('model/hand_pose_model.pth')
 
-test_image = 'E:/Project/Sit_and_reach_clip/20220628202/094.jpg'
+test_image = 'E:/Project/Sit_and_reach_clip/20220628014/109.jpg'
 oriImg = cv2.imread(test_image)  # B,G,R order
 candidate, subset = body_estimation(oriImg)
 canvas = copy.deepcopy(oriImg)
@@ -38,4 +38,5 @@ for x, y, w, is_left in hands_list:
 
 canvas = util.draw_handpose(canvas, all_hand_peaks)
 
-cv2.imwrite('result.jpg', canvas)
+cv2.imshow('img', canvas)
+cv2.waitKey(0)

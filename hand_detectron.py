@@ -74,7 +74,7 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(10):
+    for i in range(36, 40):
         file_name = file.iloc[i, 0]
         mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
@@ -125,4 +125,4 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
 
 
 if __name__ == '__main__':
-    calcute_measure(restore_path='E:/Project/Sit_and_reach_clip', save_dir='true_result')
+    calcute_measure(restore_path='./output', save_dir='./test')
