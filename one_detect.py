@@ -6,7 +6,7 @@ import numpy as np
 from src import util
 from src.body import Body
 from src.hand import Hand
-
+import matplotlib.pyplot as plt
 
 def get_x_dis(candidate, subset, idx1, idx2):
     x1, x2 = candidate[idx1, 0], candidate[idx2, 0]
@@ -134,9 +134,11 @@ def plot_one(test_image, save_file, keen_y):
     goal = np.array(goal)
     canvas = util.draw_handpose(canvas, goal)
     # canvas = util.draw_handpose(canvas, all_hand_peaks)
-    cv2.imwrite(save_file, canvas)
-    # cv2.imshow('result', canvas)
-    # cv2.waitKey(0)
+    if save_file is not None:
+        cv2.imwrite(save_file, canvas)
+
+    cv2.imshow('result', canvas)
+    cv2.waitKey(0)
     return goal
 
 

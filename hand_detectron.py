@@ -74,14 +74,14 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
     file = pd.read_csv('./sit_reach_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
-    for i in range(36, 40):
+    for i in range(len(file)):
         file_name = file.iloc[i, 0]
         mode = file.iloc[i, 5] - 1
         # frame = file.iloc[i, 3]
         id = str(file_name)
         hand_loc_list = []
-        for j in range(3):
-            frame = int(file.iloc[i, 3]) - 1 + j
+        for j in range(1):
+            frame = int(file.iloc[i, 3])
             frame = str(frame).zfill(3)
             file_path = os.path.join(restore_path, id, frame + '.jpg')
             # if not os.path.exists(os.path.join('true_result', id)):
