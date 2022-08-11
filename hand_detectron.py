@@ -86,8 +86,8 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
             file_path = os.path.join(restore_path, id, frame + '.jpg')
             # if not os.path.exists(os.path.join('true_result', id)):
             #     os.mkdir(os.path.join('true_result', id))
-            hand = plot_one(test_image=file_path,
-                            save_file=os.path.join(save_dir, f'{id}-{frame}.png'), keen_y=keen_y[mode])
+            hand, _ = plot_one(test_image=file_path,
+                               save_file=os.path.join(save_dir, f'{id}-{frame}.png'), keen_y=keen_y[mode])
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:

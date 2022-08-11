@@ -137,9 +137,9 @@ def plot_one(test_image, save_file, keen_y):
     if save_file is not None:
         cv2.imwrite(save_file, canvas)
 
-    cv2.imshow('result', canvas)
-    cv2.waitKey(0)
-    return goal
+    # cv2.imshow('result', canvas)
+    # cv2.waitKey(0)
+    return goal, canvas
 
 
 # def plot_multi(output_dir='./test', result_dir='./result'):
