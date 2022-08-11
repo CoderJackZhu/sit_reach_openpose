@@ -154,5 +154,5 @@ def plot_one(test_image, save_file, keen_y):
 if __name__ == '__main__':
     # plot_multi(output_dir='./cropped', result_dir='./cropped_result')
     plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628202/094.jpg',
-             save_file='result.png', keen_y=445)
+             save_file='show_result/result.png', keen_y=445)
     # plot_multi()

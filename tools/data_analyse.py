@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-file = pd.read_csv('./result.csv', header=0)
+file = pd.read_csv('../show_result/result.csv', header=0)
 # data = file.iloc[:, 0:3]
 data = file.iloc[:, 0:4]
 none_len = np.sum(data.iloc[:, 1] == -1)
@@ -20,7 +20,7 @@ for i in range(data.shape[0]):
         absolute_error_list.append(absolute_error)
         relative_error_list.append(relative_error)
     frame_abs_error = data.iloc[i, 1] - data.iloc[i, 0]
-    frame_rel_error = frame_abs_error_list / data.iloc[i, 0]
+    frame_rel_error = frame_abs_error / data.iloc[i, 0]
     frame_abs_error_list.append(frame_abs_error)
     frame_rel_error_list.append(frame_rel_error)
 data.iloc[:, 3].hist()

@@ -36,4 +36,4 @@ def process_video(root_dir='E:\Project\Sit_and_reach\data', save_dir='E:\Project
 
 
 if __name__ == '__main__':
-    process_video(root_dir='./data', save_dir='./output')
+    process_video(root_dir='./data', save_dir='../output')

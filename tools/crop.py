@@ -4,7 +4,7 @@ import cv2
 
 if __name__ == '__main__':
     img_dir = 'E:/Project/Sit_and_reach_clip'
-    cropped_dir = './cropped'
+    cropped_dir = '../cropped'
     img_list = os.listdir(img_dir)
     for img in img_list:
         img_path = os.path.join(img_dir, img)
