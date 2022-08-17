@@ -1,12 +1,13 @@
 import copy
-
+import os
 import cv2
 import numpy as np
-
+from tqdm import tqdm
 from src import util
 from src.body import Body
 from src.hand import Hand
 import matplotlib.pyplot as plt
+from demo import plot_origin
 
 def get_x_dis(candidate, subset, idx1, idx2):
     x1, x2 = candidate[idx1, 0], candidate[idx2, 0]
@@ -26,7 +27,7 @@ def plot_one(test_image, save_file, keen_y):
 
     candidate, subset = body_estimation(oriImg)
     canvas = copy.deepcopy(oriImg)
-    canvas = util.draw_bodypose(canvas, candidate, subset)
+    # original draw body pose
     all_body = []
 
     del_idx = []
@@ -132,6 +133,7 @@ def plot_one(test_image, save_file, keen_y):
         if all_hand_peaks[i][12].any() != 0:
             goal.append(all_hand_peaks[i])
     goal = np.array(goal)
+    canvas = util.draw_bodypose(canvas, candidate, subset)
     canvas = util.draw_handpose(canvas, goal)
     # canvas = util.draw_handpose(canvas, all_hand_peaks)
     if save_file is not None:
@@ -142,19 +144,19 @@ def plot_one(test_image, save_file, keen_y):
     return goal, canvas
 
 
-# def plot_multi(output_dir='./test', result_dir='./result'):
-#     files=os.listdir(output_dir)
-#     for file in tqdm(files):
-#         if not os.path.exists(os.path.join(result_dir, file)):
-#             os.mkdir(os.path.join(result_dir, file))
-#         pics=os.listdir(os.path.join(output_dir, file))
-#         for pic in tqdm(pics):
-#             picture=os.path.join(os.path.join(output_dir, file, pic))
-#             print(picture)
-#             plot_one(test_image=picture, save_file=os.path.join(result_dir, file, pic))
-
+def plot_multi(output_dir='./test2', result_dir='./result2'):
+    files = os.listdir(output_dir)
+    for file in tqdm(files):
+        if not os.path.exists(os.path.join(result_dir, file)):
+            os.mkdir(os.path.join(result_dir, file))
+        pics = os.listdir(os.path.join(output_dir, file))
+        for pic in tqdm(pics):
+            picture = os.path.join(os.path.join(output_dir, file, pic))
+            print(picture)
+            # plot_one(test_image=picture, save_file=os.path.join(result_dir, file, pic), keen_y=470)
+            plot_origin(test_image=picture, save_file=os.path.join(result_dir, file, pic))
 if __name__ == '__main__':
     # plot_multi(output_dir='./cropped', result_dir='./cropped_result')
-    plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628202/094.jpg',
-             save_file='show_result/result.png', keen_y=445)
-    # plot_multi()
+    # plot_one(test_image='E:/Project/Sit_and_reach_clip/20220628202/094.jpg',
+    #          save_file='show_result/result.png', keen_y=445)
+    plot_multi()

@@ -39,7 +39,7 @@ keen_y = [470, 450, 445, 450]
 def cal_result(video_name, file_name):
     my_name = file_name
     restore_path = file_name.split('.')[0]
-    file = pd.read_csv('./sit_reach_data.csv', header=0)
+    file = pd.read_csv('source_data.csv', header=0)
     file = file.iloc[int(video_name) - 1]
     file_name = str(file[0])
     mode = file[5] - 1

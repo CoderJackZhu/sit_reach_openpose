@@ -71,7 +71,7 @@ def draw_point(img, x, y):
 
 def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true_result'):
     start_time = time.time()
-    file = pd.read_csv('./sit_reach_data.csv', header=0)
+    file = pd.read_csv('source_data.csv', header=0)
     file['body_len'] = ''
     file['recorrect'] = ''
     for i in range(len(file)):
@@ -120,7 +120,7 @@ def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true
             print('未找到手')
             file.iloc[i, 7] = -1
 
-        file.to_csv('./sit.csv', index=False)
+        file.to_csv('./show_result/sit.csv', index=False)
     print(f'总共耗时{time.time() - start_time}')
 
 

@@ -152,7 +152,7 @@ def cal_one_frame(test_image, save_file, keen_y=470):
 
 
 def cal_multi_vid(root_dir='./output', save_path='./test'):
-    ori_data = pd.read_csv('./sit_reach_data.csv', header=0)
+    ori_data = pd.read_csv('source_data.csv', header=0)
     files = os.listdir(root_dir)
     files.sort()
     row_list = ['label_frame', 'meas_frame', 'label_len', 'meas_len']
@@ -190,7 +190,7 @@ def cal_multi_vid(root_dir='./output', save_path='./test'):
             result = 0
             print('最远手的位置不在范围内')
         result_file.loc[id] = [frame, large_site + 1, ori_data.iloc[id - 1, 4], result]
-        result_file.to_csv('./result_file.csv', index=False)
+        result_file.to_csv('./show_result/result_file.csv', index=False)
     # with open('./result.csv', 'w', newline='') as f:
     #     writer = csv.writer(f)
     #     writer.writerows(row_list)
