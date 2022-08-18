@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 from tqdm import tqdm
-from librs.one_detect import plot_one
+from librs.utils import plot_one
 
 
 def plot_multi(output_dir='./test2', result_dir='./result2'):

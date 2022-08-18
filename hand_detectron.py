@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import time
-from librs.one_detect import plot_one
+from librs.utils import plot_one
 
 ins = np.array([
     [[745, 473], [1176, 478]],

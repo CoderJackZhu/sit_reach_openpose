@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-from librs.one_detect import plot_one
+from librs.utils import plot_one
 from tools.vid2pic import process_one_video
 from librs.configs import *
 
@@ -21,19 +21,18 @@ def cal_result(file_name):
         raise ValueError('video name error')
 
     restore_path = file_name.split('.')[0]
-    file = pd.read_csv('source_data.csv', header=0)
+    ori_data = pd.read_csv('source_data.csv', header=0)
+
     id = video_name[-3:]
-    file = file.iloc[int(id) - 1]
+    data = ori_data.iloc[int(id) - 1]
     # file_name = str(file[0])
-    mode = file[5] - 1
+    mode = data[5] - 1
     mode = int(mode)
     hand_loc_list = []
-    frame = int(file[3])
+    frame = int(data[3])
     frame = str(frame).zfill(3)
     file_path = os.path.join(restore_path, frame + '.png')
-    # if not os.path.exists(os.path.join('true_result', id)):
-    #     os.mkdir(os.path.join('true_result', id))
-    print(file_path)
+
     hand, canvas = plot_one(test_image=file_path,
                             save_file=os.path.join(os.path.dirname(file_name), f'{id}-{frame}.png'),
                             keen_y=keen_y[mode])
