@@ -36,7 +36,7 @@ def process_videos(root_dir='E:\Project\Sit_and_reach\data', save_dir='E:\Projec
         print('{} has finished'.format(video_filename))
 
 
-def process_one_video(file='../test/20220628006.mkv', resize_height=720,
+def process_one_video(file='../test/006.mkv', resize_height=720,
                       resize_width=1280):
     capture = cv2.VideoCapture(file)
     save_dir = os.path.dirname(file)
@@ -68,5 +68,5 @@ def process_one_video(file='../test/20220628006.mkv', resize_height=720,
 
 if __name__ == '__main__':
     # process_videos(root_dir='./data')
-    process_one_video(file='../test/20220628006.mkv', resize_height=720,
+    process_one_video(file='../test/006.mkv', resize_height=720,
                       resize_width=1280)

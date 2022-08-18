@@ -6,7 +6,7 @@ from tqdm import tqdm
 from src import util
 from src.body import Body
 from src.hand import Hand
-
+from librs.configs import *
 
 def get_x_dis(candidate, subset, idx1, idx2):
     x1, x2 = candidate[idx1, 0], candidate[idx2, 0]
@@ -132,3 +132,33 @@ def get_core_person(subset, candidate, keen_y):
     # detect hand
 
     return subset, candidate
+
+
+def cal_one_best_result(root_dir, file, pics, mode, ):
+    hand_loc_list = []
+    for pic in pics:
+        picture = os.path.join(os.path.join(root_dir, file, pic))
+        if not os.path.exists(os.path.join(save_path, str(id))):
+            os.makedirs(os.path.join(save_path, str(id)))
+        hand, canvas = plot_one(picture, save_file=os.path.join(save_path, str(id), f'{pic}'), keen_y=keen_y[mode])
+        if len(hand) != 0:
+            hand_location = hand[0][12]
+        else:
+            hand_location = [0, 0]
+        hand_loc_list.append(hand_location)
+        print(f'file {file}:{pic[:-4]}/{len(pics)} finished ')
+    hand_loc_list = np.array(hand_loc_list)
+    large_site = np.argmax(hand_loc_list, axis=0)[0]
+    large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
+    if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
+            bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
+        print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
+        result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
+        result = result.round(2)
+        print('记录成绩为{}'.format(ori_data.iloc[id - 1, 4]))
+        print(f'预测成绩为{result}')
+        print(f'最远帧为{large_site + 1}')
+    else:
+        result = 0
+        print('最远手的位置不在范围内')
+    return large_site + 1, result

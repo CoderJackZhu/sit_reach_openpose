@@ -93,7 +93,7 @@ to process a video file (requires [ffmpeg-python][ffmpeg]).
 
 #### Skeleton
 
-![](images/skeleton.jpg)
+![](show_result/skeleton.jpg)
 
 #### Body Pose Estimation
 
