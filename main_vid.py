@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-from librs.utils import plot_one
+from librs.utils import plot_one, cal_one_best_result
 from tools.vid2pic import process_one_video
 from librs.configs import *
 
@@ -20,56 +20,32 @@ def cal_result(file_name):
     else:
         raise ValueError('video name error')
 
-    restore_path = file_name.split('.')[0]
+    root_dir = os.path.dirname(file_name)
     ori_data = pd.read_csv('source_data.csv', header=0)
 
     id = video_name[-3:]
     data = ori_data.iloc[int(id) - 1]
     # file_name = str(file[0])
-    mode = data[5] - 1
-    mode = int(mode)
+    mode = int(data[5]) - 1
     hand_loc_list = []
     frame = int(data[3])
     frame = str(frame).zfill(3)
-    file_path = os.path.join(restore_path, frame + '.png')
+    pics = [frame + '.png']
+    save_path = os.path.join(root_dir, 'show_result')
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+    canvas, far_frame, x_y, score = cal_one_best_result(data=data, root_dir=root_dir, file=id, pics=pics, mode=mode,
+                                                        save_path=save_path)
 
-    hand, canvas = plot_one(test_image=file_path,
-                            save_file=os.path.join(os.path.dirname(file_name), f'{id}-{frame}.png'),
-                            keen_y=keen_y[mode])
-    if len(hand) != 0:
-        hand_location = hand[0][12]
-    else:
-        hand_location = [0, 0]
-    hand_loc_list.append(hand_location)
-    print('{frame}/{id} done'.format(frame=frame, id=id))
-
-    hand_loc_list = np.array(hand_loc_list)
-    print(hand_loc_list)
-    if np.any(hand_loc_list):
-        large_site = np.argmax(hand_loc_list, axis=0)[0]
-        large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
-        if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
-                bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
-            # print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
-            result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
-            result = result.round(2)
-            # print('记录成绩为{}'.format(file[4]))
-            # print(f'未修正的成绩为{result}')
-        else:
-            print('最远手的位置不在范围内')
-            raise Exception('最远手的位置不在范围内')
-
-    else:
-        print('未找到手')
-        raise Exception('未找到手')
-    return canvas, f'最远手的坐标是({large_hand_x},{large_hand_y})', f'记录成绩为{file[4]}', f'未修正的成绩为{result}'
+    return canvas, f'最远手的坐标是({x_y[0]},{x_y[1]})', f'记录成绩为{data[4]}', \
+           f'未修正的成绩为{score}'
 
 
 if __name__ == '__main__':
     file_name = 'test/006.mkv'
-    canvas, x_y, score_label, score = cal_result(file_name)
+    canvas, x_y, label_score, score = cal_result(file_name)
     cv2.imshow('canvas', canvas)
     cv2.waitKey(0)
     print(x_y)
-    print(score_label)
+    print(label_score)
     print(score)

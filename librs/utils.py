@@ -95,7 +95,7 @@ def get_core_person(subset, candidate, keen_y):
     #     print(f'save keen x,y {candidate[idx2, 0], candidate[idx2, 1]}')
 
     if subset.shape[0] == 0:
-        return []
+        return [], []
 
     for obj in range(subset.shape[0]):
 
@@ -146,7 +146,8 @@ def plot_one(test_image, save_file, keen_y=445, origin=False):
 
     if not origin:
         subset, candidate = get_core_person(subset, candidate, keen_y)
-
+        if len(subset) == 0:
+            return [], []
     hands_list = util.handDetect(candidate, subset, oriImg)
     all_hand_peaks = []
     for x, y, w, is_left in hands_list:
@@ -182,7 +183,7 @@ def plot_one(test_image, save_file, keen_y=445, origin=False):
 
 
 def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
-    hand_loc_list = []
+    hand_loc_list, canvas_list = [], []
     for pic in pics:
         picture = os.path.join(os.path.join(root_dir, file, pic))
         if not os.path.exists(os.path.join(save_path, file)):
@@ -193,10 +194,12 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
         else:
             hand_location = [0, 0]
         hand_loc_list.append(hand_location)
+        canvas_list.append(canvas)
         print(f'{file}:{pic[:-4]}/{len(pics)} finished ')
     hand_loc_list = np.array(hand_loc_list)
     if np.any(hand_loc_list):
         large_site = np.argmax(hand_loc_list, axis=0)[0]
+        best_canvas = canvas_list[large_site]
         large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
         if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
                 bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
@@ -205,11 +208,17 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
             result = result.round(2)
             print('记录成绩为{}'.format(data[4]))
             print(f'预测成绩为{result}')
-            print(f'最远帧为{large_site + 1}')
+            if len(pics) > 5:
+                print(f'最远帧为{large_site + 1}')
+            return best_canvas, large_site + 1, [large_hand_x, large_hand_y], result
         else:
-            result = 0
-            raise Exception('最远手的位置不在范围内')
+            print('最远手的坐标不在范围内')
+            return 0, 0, [0, 0], 0
     else:
-        raise Exception('未找到手')
+        print('未检测到手')
+        return -1, -1, [-1, -1], -1
 
-    return large_site + 1, [large_hand_x, large_hand_y], result
+
+def get_TAL_frame(id):
+    data = np.genfromtxt('./show_result/sit_result_TAL.txt', delimiter=' ')
+    return data[id, 1]
