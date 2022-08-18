@@ -35,8 +35,8 @@ from src import util
 from src.body import Body
 from src.hand import Hand
 
-body_estimation = Body('model/body_pose_model.pth')
-hand_estimation = Hand('model/hand_pose_model.pth')
+body_estimation = Body('librs/model/body_pose_model.pth')
+hand_estimation = Hand('librs/model/hand_pose_model.pth')
 
 
 def process_frame(frame, body=True, hands=True):

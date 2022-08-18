@@ -1,15 +1,6 @@
-from one_detect import *
 import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import cv2
-import time
 import os
-import math
-import sys
-import argparse
-import csv
 
 
 def getVarianceMean(scr, winSize):

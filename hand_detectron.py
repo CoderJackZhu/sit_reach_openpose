@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import time
-from one_detect import plot_one
+from librs.one_detect import plot_one
 
 ins = np.array([
     [[745, 473], [1176, 478]],
@@ -35,38 +35,8 @@ srcpoint = [
 keen_y = [470, 450, 445, 450]
 
 
-# 坐标变换
-def cvt_pos(pos, cvt_mat_t):
-    u = pos[0]
-    v = pos[1]
-    x = (cvt_mat_t[0][0] * u + cvt_mat_t[0][1] * v + cvt_mat_t[0][2]) / (
-            cvt_mat_t[2][0] * u + cvt_mat_t[2][1] * v + cvt_mat_t[2][2])
-    y = (cvt_mat_t[1][0] * u + cvt_mat_t[1][1] * v + cvt_mat_t[1][2]) / (
-            cvt_mat_t[2][0] * u + cvt_mat_t[2][1] * v + cvt_mat_t[2][2])
-    return (x, y)
 
 
-def update_result(pos, mode=1):
-    src = cv2.imread('./images/2-001.jpg')
-    w, h = 800, 500
-    srcPoint = np.float32(srcpoint[mode])  # 场景2，参考线内缘四角
-    canPoint = np.float32([[0, 0], [w, 0], [0, h], [w, h]])
-    Mat = cv2.getPerspectiveTransform(np.array(srcPoint), np.array(canPoint))
-    # result = cv2.warpPerspective(src, Mat, (w, h))
-    # cv2.imshow('res', result)
-    # cv2.imwrite('./remould.png', result)
-    # cv2.waitKey(0)
-    x, y = cvt_pos(pos, Mat)
-    true_result = x * 80 / w
-    return true_result
-
-
-def draw_point(img, x, y):
-    cv2.circle(img, (x, y), 5, (0, 0, 255), -1)
-    cv2.imshow('img', img)
-    cv2.waitKey(0)
-    cv2.imwrite('./img.png', img)
-    return img
 
 
 def calcute_measure(restore_path='E:\Project\Sit_and_reach_clip', save_dir='true_result'):

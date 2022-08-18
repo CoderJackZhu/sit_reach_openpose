@@ -72,7 +72,7 @@ class Hand(object):
 
 
 if __name__ == "__main__":
-    hand_estimation = Hand('../model/hand_pose_model.pth')
+    hand_estimation = Hand('../librs/model/hand_pose_model.pth')
 
     # test_image = '../images/hand.jpg'
     test_image = '../images/hand.jpg'

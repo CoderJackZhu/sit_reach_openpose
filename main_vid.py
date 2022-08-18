@@ -3,8 +3,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
-import time
-from one_detect import plot_one
+from librs.one_detect import plot_one
 from tools.vid2pic import process_one_video
 
 ins = np.array([
