@@ -219,6 +219,6 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
         return -1, -1, [-1, -1], -1
 
 
-def get_TAL_frame(id):
+def get_TAL_frame(idx):
     data = np.genfromtxt('./show_result/sit_result_TAL.txt', delimiter=' ')
-    return data[id, 1]
+    return data[idx, 1]

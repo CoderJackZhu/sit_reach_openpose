@@ -30,7 +30,7 @@ def cal_multi_vid(choose='predict', root_dir='E:/Project/Sit_and_reach_clip', sa
         elif type(choose) == int:
             pics = [str(frame).zfill(3) + '.jpg' for frame in range(frame - choose // 2, frame + choose // 2 + 1)]
         elif choose == 'predict':
-            predict_frame = get_TAL_frame(id)
+            predict_frame = get_TAL_frame(id - 1)
             if 0 < predict_frame < data[7]:
                 pics = [str(int(predict_frame)).zfill(3) + '.jpg']
             else:
