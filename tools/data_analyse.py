@@ -55,7 +55,7 @@ def analyse_data(data_path='../show_result/predict_result.csv'):
     plt.show()
 
 
-def analyse_frame(data_path='../show_result/predict_result.csv'):
+def analyse_frame(data_path='../show_result/predict_result_v1.csv'):
     file = pd.read_csv(data_path, header=0)
     with open('../show_result/sit_result_TAL.txt', 'r') as f:
         frame_data = f.readlines()
