@@ -43,9 +43,8 @@ def cal_multi_vid(choose='predict', root_dir='E:/Project/Sit_and_reach_clip', sa
                                                             file=file, pics=pics, mode=mode, save_path=save_path)
         result_file.loc[id] = [frame, far_frame, data[4], score, x_y]
         result_file.to_csv('./show_result/predict_result.csv', index=False)
-    with open('./all_predict_result.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(result_file)
+    with open('./show_result/all_predict_result.csv', 'w', newline='') as f:
+        f.write(result_file.to_csv(index=False))
 
 
 if __name__ == '__main__':

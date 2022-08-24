@@ -197,8 +197,9 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
         canvas_list.append(canvas)
         print(f'{file}:{pic[:-4]}/{len(pics)} finished ')
     hand_loc_list = np.array(hand_loc_list)
-    if np.any(hand_loc_list):
+    if np.any(hand_loc_list != 0):
         large_site = np.argmax(hand_loc_list, axis=0)[0]
+        large_frame = int(pics[large_site][:-4])
         best_canvas = canvas_list[large_site]
         large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
         if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
@@ -208,9 +209,9 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
             result = result.round(2)
             print('记录成绩为{}'.format(data[4]))
             print(f'预测成绩为{result}')
-            if len(pics) > 5:
-                print(f'最远帧为{large_site + 1}')
-            return best_canvas, large_site + 1, [large_hand_x, large_hand_y], result
+            # if len(pics) > 5:
+            print(f'最远帧为{large_frame}')
+            return best_canvas, large_frame, [large_hand_x, large_hand_y], result
         else:
             print('最远手的坐标不在范围内')
             return 0, 0, [0, 0], 0
@@ -222,3 +223,16 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
 def get_TAL_frame(idx):
     data = np.genfromtxt('./show_result/sit_result_TAL.txt', delimiter=' ')
     return data[idx, 1]
+
+
+def plot_multi(output_dir='./test2', result_dir='./result2'):
+    files = os.listdir(output_dir)
+    for file in tqdm(files):
+        if not os.path.exists(os.path.join(result_dir, file)):
+            os.mkdir(os.path.join(result_dir, file))
+        pics = os.listdir(os.path.join(output_dir, file))
+        for pic in tqdm(pics):
+            picture = os.path.join(os.path.join(output_dir, file, pic))
+            print(picture)
+            # plot_one(test_image=picture, save_file=os.path.join(result_dir, file, pic), keen_y=470)
+            plot_one(test_image=picture, save_file=os.path.join(result_dir, file, pic))
