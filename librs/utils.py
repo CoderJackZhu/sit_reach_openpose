@@ -183,20 +183,37 @@ def plot_one(test_image, save_file, keen_y=445, origin=False):
 
 
 def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
-    hand_loc_list, canvas_list = [], []
-    for pic in pics:
-        picture = os.path.join(os.path.join(root_dir, file, pic))
-        if not os.path.exists(os.path.join(save_path, file)):
-            os.mkdir(os.path.join(save_path, file))
-        hand, canvas = plot_one(picture, save_file=os.path.join(save_path, file, f'{pic}'), keen_y=keen_y[mode])
-        if len(hand) != 0:
-            hand_location = hand[0][12]
+    all_pic_list = []
+    pic_nums = [int(pic[:-4]) for pic in pics]
+    num_count = 0
+    while (1):
+        pic_list = []
+        for pic_num in pic_nums:
+            multi_list = [pic_num - num_count, pic_num, pic_num + num_count]
+            for one_pic in multi_list:
+                if one_pic not in all_pic_list:
+                    all_pic_list.append(one_pic)
+                    pic_list.append(one_pic)
+        print(pic_list)
+        pics = [str(pic).zfill(3) + '.jpg' for pic in pic_list]
+        hand_loc_list, canvas_list = [], []
+        for pic in pics:
+            picture = os.path.join(os.path.join(root_dir, file, pic))
+            if not os.path.exists(os.path.join(save_path, file)):
+                os.mkdir(os.path.join(save_path, file))
+            hand, canvas = plot_one(picture, save_file=os.path.join(save_path, file, f'{pic}'), keen_y=keen_y[mode])
+            if len(hand) != 0:
+                hand_location = hand[0][12]
+            else:
+                hand_location = [0, 0]
+            hand_loc_list.append(hand_location)
+            canvas_list.append(canvas)
+            print(f'{file}:{pic[:-4]}/{len(pics)} finished ')
+        hand_loc_list = np.array(hand_loc_list)
+        if np.any(hand_loc_list != 0):
+            break
         else:
-            hand_location = [0, 0]
-        hand_loc_list.append(hand_location)
-        canvas_list.append(canvas)
-        print(f'{file}:{pic[:-4]}/{len(pics)} finished ')
-    hand_loc_list = np.array(hand_loc_list)
+            num_count += 1
     if np.any(hand_loc_list != 0):
         large_site = np.argmax(hand_loc_list, axis=0)[0]
         large_frame = int(pics[large_site][:-4])

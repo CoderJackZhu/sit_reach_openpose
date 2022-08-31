@@ -48,4 +48,4 @@ def cal_multi_vid(choose='predict', root_dir='E:/Project/Sit_and_reach_clip', sa
 
 
 if __name__ == '__main__':
-    cal_multi_vid()
+    cal_multi_vid(choose='predict', root_dir='./source_test', save_path='./desti_test')
