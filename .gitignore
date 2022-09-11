@@ -14,3 +14,8 @@ true_result/
 .idea/
 .gitkeep
 *.prototxt
+!/show_result/keypoints_hand.png
+!/show_result/keypoints_pose_18.png
+!/show_result/predict_result_v1.csv
+!/show_result/remould.png
+!/show_result/skeleton.jpg

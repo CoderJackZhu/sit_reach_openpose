@@ -214,27 +214,27 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
             break
         else:
             num_count += 1
-    if np.any(hand_loc_list != 0):
-        large_site = np.argmax(hand_loc_list, axis=0)[0]
-        large_frame = int(pics[large_site][:-4])
-        best_canvas = canvas_list[large_site]
-        large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
-        if ins[mode, 0, 0] < large_hand_x < ins[mode, 1, 0] and \
-                bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
-            print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
-            result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
-            result = result.round(2)
-            print('记录成绩为{}'.format(data[4]))
-            print(f'预测成绩为{result}')
-            # if len(pics) > 5:
-            print(f'最远帧为{large_frame}')
-            return best_canvas, large_frame, [large_hand_x, large_hand_y], result
-        else:
-            print('最远手的坐标不在范围内')
-            return 0, 0, [0, 0], 0
+    # if np.any(hand_loc_list != 0):
+    large_site = np.argmax(hand_loc_list, axis=0)[0]
+    large_frame = int(pics[large_site][:-4])
+    best_canvas = canvas_list[large_site]
+    large_hand_x, large_hand_y = hand_loc_list[large_site, 0], hand_loc_list[large_site, 1]
+    if bg[mode, 0, 0] < large_hand_x < bg[mode, 1, 0] and \
+            bg[mode, 0, 1] < large_hand_y < bg[mode, 1, 1]:
+        print('最远手的坐标是({},{})'.format(large_hand_x, large_hand_y))
+        result = (large_hand_x - ins[mode, 0, 0]) / (ins[mode, 1, 0] - ins[mode, 0, 0]) * 80
+        result = result.round(2)
+        print('记录成绩为{}'.format(data[4]))
+        print(f'预测成绩为{result}')
+        # if len(pics) > 5:
+        print(f'最远帧为{large_frame}')
+        return best_canvas, large_frame, [large_hand_x, large_hand_y], result
     else:
-        print('未检测到手')
-        return -1, -1, [-1, -1], -1
+        print('最远手的坐标不在范围内')
+        return 0, 0, [0, 0], 0
+    # else:
+    #     print('未检测到手')
+    #     return -1, -1, [-1, -1], -1
 
 
 def get_TAL_frame(idx):

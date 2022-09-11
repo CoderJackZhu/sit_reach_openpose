@@ -4,7 +4,7 @@ import pandas as pd
 import seaborn as sns
 
 
-def analyse_data(data_path='../show_result/predict_result.csv'):
+def analyse_data(data_path='../show_result/predict_interframe_result.csv'):
     file = pd.read_csv(data_path, header=0)
     # data = file.iloc[:, 0:3]
     data = file.iloc[:, 0:4]
@@ -82,4 +82,4 @@ def analyse_frame(data_path='../show_result/predict_result_v1.csv'):
 
 
 if __name__ == '__main__':
-    analyse_frame()
+    analyse_data()
