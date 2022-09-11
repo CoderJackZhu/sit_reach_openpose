@@ -58,34 +58,43 @@ def get_core_person(subset, candidate, keen_y):
         idx2 = int(subset[obj, 12])  # 右膝盖
         idx3 = int(subset[obj, 8])  # 左腰
         idx4 = int(subset[obj, 11])  # 右腰
-        idx5 = int(subset[obj, 10])  # 左脚
-        idx6 = int(subset[obj, 13])  # 右脚
-        if idx1 != -1:
-            if candidate[idx1, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        if idx2 != -1:
-            if candidate[idx2, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        if idx3 != -1:
-            if candidate[idx3, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        if idx4 != -1:
-            if candidate[idx4, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        if idx5 != -1:
-            if candidate[idx5, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        if idx6 != -1:
-            if candidate[idx6, 1] < keen_y:
-                del_idx.append(obj)
-                continue
-        elif idx1 == -1 and idx2 == -1 and idx3 == -1 and idx4 == -1 and idx5 == -1 and idx6 == -1:
+        # idx5 = int(subset[obj, 10])  # 左脚
+        # idx6 = int(subset[obj, 13])  # 右脚
+        body_list = [idx1, idx2, idx3, idx4]
+        body_list = [i for i in body_list if i != -1]
+        if len(body_list) == 0:
             del_idx.append(obj)
+            continue
+        else:
+            min_y = np.min(candidate[body_list, 1])
+            if min_y < keen_y:
+                del_idx.append(obj)
+        # if idx1 != -1:
+        #     if candidate[idx1, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # if idx2 != -1:
+        #     if candidate[idx2, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # if idx3 != -1:
+        #     if candidate[idx3, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # if idx4 != -1:
+        #     if candidate[idx4, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # if idx5 != -1:
+        #     if candidate[idx5, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # if idx6 != -1:
+        #     if candidate[idx6, 1] < keen_y:
+        #         del_idx.append(obj)
+        #         continue
+        # elif idx1 == -1 and idx2 == -1 and idx3 == -1 and idx4 == -1 and idx5 == -1 and idx6 == -1:
+        #     del_idx.append(obj)
     subset = np.delete(subset, del_idx, 0)
 
     # for obj in range(subset.shape[0]):
