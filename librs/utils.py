@@ -208,9 +208,9 @@ def cal_one_best_result(data, root_dir, file, pics, mode, save_path):
         hand_loc_list, canvas_list = [], []
         for pic in pics:
             picture = os.path.join(os.path.join(root_dir, file, pic))
-            if not os.path.exists(os.path.join(save_path, file)):
-                os.mkdir(os.path.join(save_path, file))
-            hand, canvas = plot_one(picture, save_file=os.path.join(save_path, file, f'{pic}'), keen_y=keen_y[mode])
+            # if not os.path.exists(os.path.join(save_path, file)):
+            #     os.mkdir(os.path.join(save_path, file))
+            hand, canvas = plot_one(picture, save_file=os.path.join(save_path, file + '-' + pic), keen_y=keen_y[mode])
             if len(hand) != 0:
                 hand_location = hand[0][12]
             else:
